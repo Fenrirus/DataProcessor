@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace DataProcessor
 {
@@ -34,7 +35,22 @@ namespace DataProcessor
 
         private static void ProcessDirectory(string directioPath, string fileType)
         {
-            throw new NotImplementedException();
+            //var allFiles = Directory.GetFiles(directioPath);
+            switch (fileType)
+            {
+                case "TEXT":
+                    var textFile = Directory.GetFiles(directioPath, "*txt");
+                    foreach (var textFilePath in textFile)
+                    {
+                        var fileProcessor = new FileProcessor(textFilePath);
+                        fileProcessor.Process();
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine($"{fileType} not suported");
+                    return;
+            }
         }
 
         private static void ProcessSingleFile(string filePath)
