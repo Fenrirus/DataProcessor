@@ -53,21 +53,10 @@
             File.Move(FilePath, inprogressFilePath);
 
             string extension = Path.GetExtension(FilePath);
-            switch (extension)
-            {
-                case ".txt":
-                    ProcessTextFile(inprogressFilePath);
-                    break;
-
-                default:
-                    Console.WriteLine($"{extension} is an unsupported file type.");
-                    break;
-            }
 
             string completedDirectoryPath = Path.Combine(rootDirectoryPath, Complete);
             Directory.CreateDirectory(completedDirectoryPath);
 
-            Console.WriteLine($"Moving {inprogressFilePath} to {completedDirectoryPath}");
             //File.Move(inProgressFilePath, Path.Combine(completedDirectoryPath, inputFileName));
 
             var completedFileName =
@@ -76,18 +65,25 @@
             //completedFileName = Path.ChangeExtension(completedFileName, ".complete");
 
             var completedFilePath = Path.Combine(completedDirectoryPath, completedFileName);
+            switch (extension)
+            {
+                case ".txt":
+                    var textProcessor = new TextFileProcessor(inprogressFilePath, completedFilePath);
+                    textProcessor.Process();
+                    break;
 
-            File.Move(inprogressFilePath, completedFilePath);
+                default:
+                    Console.WriteLine($"{extension} is an unsupported file type.");
+                    break;
+            }
+
+            Console.WriteLine($"Complete processing of {inprogressFilePath} ");
+            Console.WriteLine($"Deleting {inprogressFilePath}");
+            File.Delete(inprogressFilePath);
 
             // jest wielowątkowe, więc jak nie ma folderu to się psuje
             //var inProgressDirectoryPath = Path.GetDirectoryName(inprogressFilePath);
             //Directory.Delete(inProgressDirectoryPath, true);
-        }
-
-        private void ProcessTextFile(string inProgressFilePath)
-        {
-            Console.WriteLine($"Processing text file {inProgressFilePath}");
-            // Read in and process
         }
     }
 }
