@@ -79,8 +79,9 @@
 
             File.Move(inprogressFilePath, completedFilePath);
 
-            var inProgressDirectoryPath = Path.GetDirectoryName(inprogressFilePath);
-            Directory.Delete(inProgressDirectoryPath, true);
+            // jest wielowątkowe, więc jak nie ma folderu to się psuje
+            //var inProgressDirectoryPath = Path.GetDirectoryName(inprogressFilePath);
+            //Directory.Delete(inProgressDirectoryPath, true);
         }
 
         private void ProcessTextFile(string inProgressFilePath)
